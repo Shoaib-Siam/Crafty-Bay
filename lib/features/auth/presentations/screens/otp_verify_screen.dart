@@ -42,7 +42,9 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
                     style: textTheme.titleLarge,
                   ),
                   Text(
-                    context.localization.a6DigitCodeHasBeenSentToYourEmailAddress,
+                    context
+                        .localization
+                        .a6DigitCodeHasBeenSentToYourEmailAddress,
                     textAlign: TextAlign.center,
                     style: textTheme.bodyLarge?.copyWith(
                       fontSize: 14,
@@ -82,13 +84,14 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
 
                       // Borders
                       activeColor: Theme.of(context).colorScheme.primary,
-                      inactiveColor: Colors.grey, // Grey border when not focused
+                      inactiveColor:
+                          Colors.grey, // Grey border when not focused
                       selectedColor: Theme.of(context).colorScheme.primary,
                     ),
                     validator: (value) => Validators.validateOTP(value),
                   ),
-                  // FIX ENDS HERE
 
+                  // FIX ENDS HERE
                   const SizedBox(height: 15),
 
                   FilledButton(
@@ -117,23 +120,26 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
     );
   }
 
-  void _onVerifyButton() {
+  void _onVerifyButton() async { // Make it async
     if (_formKey.currentState!.validate()) {
+      // FIX: Close keyboard before navigating
+      FocusScope.of(context).unfocus();
       Navigator.pushNamed(context, ResetPasswordScreen.routeName);
     }
   }
 
   void _onTapBackToSignInButton() {
+    // FIX: Close keyboard before navigating
+    FocusScope.of(context).unfocus();
     Navigator.pushNamedAndRemoveUntil(
       context,
       SignInScreen.routeName,
-          (route) => false,
+      (route) => false,
     );
   }
 
   @override
   void dispose() {
-    _otpController.dispose();
     super.dispose();
   }
 }

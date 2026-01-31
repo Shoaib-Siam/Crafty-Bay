@@ -150,10 +150,8 @@ class _SignInScreenState extends State<SignInScreen> {
 
   void _onTapSignInButton() {
     if (_formKey.currentState!.validate()) {
-      // In a real app, you would call your Login API here.
-
-      // Navigate to the Main Bottom Nav (Home)
-      // We use pushReplacementNamed so the user can't press "Back" to return to Login.
+      // FIX: Close keyboard before navigating
+      FocusScope.of(context).unfocus();
     }
     Navigator.pushReplacementNamed(context, MainBottomNavScreen.routeName);
   }

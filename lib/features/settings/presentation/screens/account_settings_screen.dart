@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../auth/presentations/screens/sign_in_screen.dart';
 import 'change_password_screen.dart';
 import 'edit_profile_screen.dart';
 
@@ -146,7 +147,11 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
             width: double.infinity,
             child: OutlinedButton(
               onPressed: () {
-                // TODO: Clear User Data & Navigate to Login
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  SignInScreen.routeName,
+                      (route) => false,
+                );
               },
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: Colors.red),

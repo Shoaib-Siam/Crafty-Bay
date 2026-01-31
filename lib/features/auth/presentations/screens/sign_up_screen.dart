@@ -1,11 +1,11 @@
 import 'package:crafty_bay/app/extensions/localization_extension.dart';
+import 'package:crafty_bay/features/auth/presentations/screens/sign_in_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 import '../widgets/app_logo.dart';
 import '../widgets/password_visibility_icon.dart';
 import '../widgets/validators.dart';
-import 'otp_verify_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -28,7 +28,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   bool _passwordVisible = false;
   String? _completePhoneNumber;
-
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +95,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       hintText: context.localization.enterYourLastName,
                     ),
                     validator: Validators.validateLastName,
-
                   ),
                   SizedBox(height: 15),
 
@@ -171,8 +169,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                  )
-
+                  ),
                 ],
               ),
             ),
@@ -184,27 +181,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   void _onTapSignUpButton() {
     if (_formKey.currentState!.validate()) {
-      final fullName =
-          '${_firstNameController.text} ${_lastNameController.text}';
-      final email = _emailController.text;
-      final phone = _completePhoneNumber; // ✅ FIXED
-      final password = _passwordController.text;
-      final address = _addressController.text;
-
-      print('Full Name: $fullName');
-      print('Email: $email');
-      print('Phone: $phone');
-      print('Password: $password');
-      print('Address: $address');
+      // FIX: Close keyboard before navigating
+      FocusScope.of(context).unfocus();
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        SignInScreen.routeName,
+            (route) => false,
+      );
     }
-    Navigator.pushNamed(context, OtpVerifyScreen.routeName);
   }
 
   void _onTapBackToSignInButton() {
+    // FIX: Close keyboard before navigating
+    FocusScope.of(context).unfocus();
     Navigator.pop(context);
   }
-
-
 
   @override
   void dispose() {

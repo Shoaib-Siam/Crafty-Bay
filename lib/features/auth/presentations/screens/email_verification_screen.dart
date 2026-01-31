@@ -11,7 +11,8 @@ class EmailVerificationScreen extends StatefulWidget {
   static const String routeName = '/email-verification';
 
   @override
-  State<EmailVerificationScreen> createState() => _EmailVerificationScreenState();
+  State<EmailVerificationScreen> createState() =>
+      _EmailVerificationScreenState();
 }
 
 class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
@@ -39,9 +40,9 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                 const SizedBox(height: 8),
                 Text(
                   'Please enter your email address',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.grey,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(color: Colors.grey),
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
@@ -77,18 +78,19 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
 
   void _onTapNextButton() {
     if (_formKey.currentState!.validate()) {
-      // TODO: Call API to send OTP to this email
-
-      // Navigate to OTP Screen
+      // FIX: Close keyboard before navigating
+      FocusScope.of(context).unfocus();
       Navigator.pushNamed(context, OtpVerifyScreen.routeName);
     }
   }
 
   void _onTapBackToSignInButton() {
+    // FIX: Close keyboard before navigating
+    FocusScope.of(context).unfocus();
     Navigator.pushNamedAndRemoveUntil(
       context,
       SignInScreen.routeName,
-          (route) => false,
+      (route) => false,
     );
   }
 

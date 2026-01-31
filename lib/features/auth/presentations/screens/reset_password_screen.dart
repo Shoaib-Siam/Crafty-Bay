@@ -137,7 +137,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   void _onTapConfirmButton() {
     if (_formKey.currentState!.validate()) {
       // TODO: Call API to Reset Password
-
+      // FIX: Close keyboard before navigating
+      FocusScope.of(context).unfocus();
       Navigator.pushNamedAndRemoveUntil(
         context,
         SignInScreen.routeName,
@@ -147,6 +148,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   }
 
   void _onTapBackToSignInButton() {
+    // FIX: Close keyboard before navigating
+    FocusScope.of(context).unfocus();
     Navigator.pushNamedAndRemoveUntil(
       context,
       SignInScreen.routeName,
