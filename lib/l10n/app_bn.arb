@@ -1,0 +1,40 @@
+{
+  "hello": "হ্যালো",
+  "selectLanguage": "ভাষা নির্বাচন করুন",
+  "version": "ভার্সন",
+
+  "welcomeBack": "স্বাগতম আপনাকে",
+  "enterYourEmailAndPassword": "আপনার ইমেইল এবং পাসওয়ার্ড লিখুন",
+
+  "email": "ইমেইল",
+  "enterYourEmail": "আপনার ইমেইল লিখুন",
+
+  "password": "পাসওয়ার্ড",
+  "enterYourPassword": "আপনার পাসওয়ার্ড লিখুন",
+
+  "signIn": "সাইন ইন",
+  "forgotPassword": "পাসওয়ার্ড ভুলে গেছেন?",
+  "dontHaveAccount": "আপনার কি অ্যাকাউন্ট নেই? ",
+  "signUp": "সাইন আপ",
+
+  "createNewAccount": "নতুন অ্যাকাউন্ট তৈরি করুন",
+ "pleaseEnterYourDetails": "নতুন অ্যাকাউন্ট তৈরি করার জন্য আপনার তথ্য প্রদান করুন",
+
+  "firstName": "নামের প্রথম অংশ",
+  "enterYourFirstName": "আপনার নামের প্রথম অংশ লিখুন",
+
+  "lastName": "নামের শেষ অংশ",
+  "enterYourLastName": "আপনার নামের শেষ অংশ লিখুন",
+
+  "mobileNumber": "মোবাইল নম্বর",
+  "enterYourMobileNumber": "আপনার মোবাইল নম্বর লিখুন",
+
+  "address": "ঠিকানা",
+  "enterYourAddress": "আপনার ঠিকানা লিখুন",
+
+  "backToSignIn": "সাইন ইনে ফিরে যান",
+
+  "verifyOTP": "ওটিপি ভেরিফাই করুন",
+  "a6DigitCodeHasBeenSentToYourEmailAddress": "৬ ডিজিটের একটি কোড আপনার ইমেইলে পাঠানো হয়েছে",
+  "verify": "ভেরিফাই"
+}

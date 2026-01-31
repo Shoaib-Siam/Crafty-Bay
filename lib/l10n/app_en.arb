@@ -1,0 +1,36 @@
+{
+  "hello": "Hello",
+  "selectLanguage": "Select Language",
+  "version": "Version",
+  "language": "Language",
+  "english": "English",
+  "bangla": "Bangla",
+
+  "welcomeBack": "Welcome Back",
+  "enterYourEmailAndPassword": "Enter your email and password",
+  "email": "Email",
+  "enterYourEmail": "Enter your email",
+  "password": "Password",
+  "enterYourPassword": "Enter your password",
+  "signIn": "Sign In",
+  "forgotPassword": "Forgot Password?",
+  "dontHaveAccount": "Don't have an account? ",
+  "signUp": "Sign Up",
+
+  "createNewAccount": "Create New Account",
+  "pleaseEnterYourDetails": "Please enter your details to create a new account",
+  "firstName": "First Name",
+  "enterYourFirstName": "Enter your first name",
+  "lastName": "Last Name",
+  "enterYourLastName": "Enter your last name",
+  "mobileNumber": "Mobile Number",
+  "enterYourMobileNumber": "Enter your mobile number",
+  "address": "Address",
+  "enterYourAddress": "Enter your address",
+  "backToSignIn": "Back to Sign In",
+
+  "verifyOTP": "Verify OTP",
+  "a6DigitCodeHasBeenSentToYourEmailAddress": "A 6-digit code has been sent to your email address",
+  "verify": "Verify"
+
+}
