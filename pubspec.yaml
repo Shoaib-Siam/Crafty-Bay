@@ -27,6 +27,8 @@ dependencies:
   pin_code_fields: ^8.0.1
   google_fonts: ^6.2.1
   carousel_slider_plus: ^7.1.1
+  http: ^1.6.0
+  logger: ^2.6.2
 
 dev_dependencies:
   flutter_test:

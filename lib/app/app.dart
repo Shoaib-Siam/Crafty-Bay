@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 
-
 import '../features/auth/presentations/screens/splash_screen.dart';
 import '../l10n/app_localizations.dart';
 import 'app_theme.dart';
@@ -14,6 +13,8 @@ import 'controller_binder.dart';
 class CraftyBay extends StatefulWidget {
   const CraftyBay({super.key});
 
+  static final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey<NavigatorState>();
   static final LanguageController languageController = LanguageController();
 
   @override
@@ -33,6 +34,7 @@ class _CraftyBayState extends State<CraftyBay> {
 
       builder: (languageController) {
         return GetMaterialApp(
+          navigatorKey: CraftyBay.navigatorKey,
           debugShowCheckedModeBanner: false,
           localizationsDelegates: [
             AppLocalizations.delegate,
