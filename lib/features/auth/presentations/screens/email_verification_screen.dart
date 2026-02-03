@@ -2,8 +2,10 @@ import 'package:crafty_bay/app/extensions/localization_extension.dart';
 import 'package:crafty_bay/features/auth/presentations/screens/sign_in_screen.dart';
 import 'package:crafty_bay/features/auth/presentations/widgets/validators.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../controllers/email_verification_controller.dart';
 import '../widgets/app_logo.dart';
-import 'otp_verify_screen.dart'; // We will navigate here next
+import 'otp_verify_screen.dart';
 
 class EmailVerificationScreen extends StatefulWidget {
   const EmailVerificationScreen({super.key});
@@ -11,13 +13,16 @@ class EmailVerificationScreen extends StatefulWidget {
   static const String routeName = '/email-verification';
 
   @override
-  State<EmailVerificationScreen> createState() =>
-      _EmailVerificationScreenState();
+  State<EmailVerificationScreen> createState() => _EmailVerificationScreenState();
 }
 
 class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
   final TextEditingController _emailTEController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  final EmailVerificationController _controller = Get.put(EmailVerificationController());
+
+  AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +32,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
           padding: const EdgeInsets.all(24),
           child: Form(
             key: _formKey,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
+            autovalidateMode: _autoValidateMode,
             child: Column(
               children: [
                 const SizedBox(height: 80),
@@ -40,9 +45,9 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                 const SizedBox(height: 8),
                 Text(
                   'Please enter your email address',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyMedium?.copyWith(color: Colors.grey),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Colors.grey,
+                  ),
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
@@ -52,9 +57,18 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                   validator: Validators.validateEmail,
                 ),
                 const SizedBox(height: 20),
-                FilledButton(
-                  onPressed: _onTapNextButton,
-                  child: const Text('Next'),
+
+                GetBuilder<EmailVerificationController>(
+                    builder: (controller) {
+                      return Visibility(
+                        visible: !controller.inProgress,
+                        replacement: const CircularProgressIndicator(),
+                        child: FilledButton(
+                          onPressed: _onTapNextButton,
+                          child: const Text('Next'),
+                        ),
+                      );
+                    }
                 ),
                 const SizedBox(height: 10),
 
@@ -76,22 +90,33 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
     );
   }
 
-  void _onTapNextButton() {
+  Future<void> _onTapNextButton() async {
     if (_formKey.currentState!.validate()) {
-      // FIX: Close keyboard before navigating
       FocusScope.of(context).unfocus();
-      Navigator.pushNamed(context, OtpVerifyScreen.routeName);
+
+      String email = _emailTEController.text.trim();
+      final bool result = await _controller.verifyEmail(email);
+
+      if (result) {
+        // Navigate and pass data: Email & Flag
+        Get.toNamed(
+            OtpVerifyScreen.routeName,
+            arguments: {
+              'email': email,
+              'isPasswordReset': true // Because this screen is for Forgot Password
+            }
+        );
+      }
+    } else {
+      setState(() {
+        _autoValidateMode = AutovalidateMode.onUserInteraction;
+      });
     }
   }
 
   void _onTapBackToSignInButton() {
-    // FIX: Close keyboard before navigating
     FocusScope.of(context).unfocus();
-    Navigator.pushNamedAndRemoveUntil(
-      context,
-      SignInScreen.routeName,
-      (route) => false,
-    );
+    Get.offAllNamed(SignInScreen.routeName);
   }
 
   @override

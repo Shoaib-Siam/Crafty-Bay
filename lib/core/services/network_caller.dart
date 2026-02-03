@@ -10,16 +10,18 @@ class NetworkCaller {
   final String _unAuthorizedErrorMessage = 'un-authorized';
   final Logger _logger = Logger();
 
-
   final VoidCallback onUnAuthorized;
-  final String accessToken;
+  // CHANGE 1: AccessToken is now a function, not a fixed string
+  final String Function() accessToken;
 
   NetworkCaller({required this.onUnAuthorized, required this.accessToken});
 
   Future<NetworkResponse> getRequest({required String url}) async {
     try {
       Uri uri = Uri.parse(url);
-      final Map<String, String> headers = {'token': accessToken};
+
+      // CHANGE 2: Call the function with () to get the current token
+      final Map<String, String> headers = {'token': accessToken()};
 
       _logRequest('GET', url, null, headers);
 
@@ -43,16 +45,11 @@ class NetworkCaller {
           statusCode: response.statusCode,
           body: {},
           errorMessage:
-          decodedJson['data']?.toString() ?? _unAuthorizedErrorMessage,
+              decodedJson['data']?.toString() ?? _unAuthorizedErrorMessage,
         );
       } else {
-        final decodedJson = jsonDecode(response.body);
-        return NetworkResponse(
-          success: false,
-          statusCode: response.statusCode,
-          body: {},
-          errorMessage: decodedJson['data']?.toString() ?? _defaultErrorMessage,
-        );
+        // CHANGE 3: Smart Error Parsing
+        return _handleErrorResponse(response);
       }
     } catch (e) {
       return NetworkResponse(
@@ -66,16 +63,16 @@ class NetworkCaller {
 
   Future<NetworkResponse> postRequest({
     required String url,
-    // FIX: Changed to dynamic so you can send int/bool/lists, not just Strings
     required Map<String, dynamic>? body,
     bool isFromLogin = false,
   }) async {
     try {
       Uri uri = Uri.parse(url);
 
+      // CHANGE 2: Call accessToken()
       final Map<String, String> headers = {
         'Content-Type': 'application/json',
-        'token': accessToken,
+        'token': accessToken(),
       };
 
       _logRequest('POST', url, body, headers);
@@ -88,7 +85,7 @@ class NetworkCaller {
 
       _logResponse(url, response);
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         final decodedJson = jsonDecode(response.body);
         return NetworkResponse(
           success: true,
@@ -106,16 +103,11 @@ class NetworkCaller {
           statusCode: response.statusCode,
           body: {},
           errorMessage:
-          decodedJson['data']?.toString() ?? _unAuthorizedErrorMessage,
+              decodedJson['data']?.toString() ?? _unAuthorizedErrorMessage,
         );
       } else {
-        final decodedJson = jsonDecode(response.body);
-        return NetworkResponse(
-          success: false,
-          statusCode: response.statusCode,
-          body: {},
-          errorMessage: decodedJson['data']?.toString() ?? _defaultErrorMessage,
-        );
+        // CHANGE 3: Smart Error Parsing
+        return _handleErrorResponse(response);
       }
     } catch (e) {
       return NetworkResponse(
@@ -135,9 +127,10 @@ class NetworkCaller {
     try {
       Uri uri = Uri.parse(url);
 
+      // CHANGE 2: Call accessToken()
       final Map<String, String> headers = {
         'Content-Type': 'application/json',
-        'token': accessToken,
+        'token': accessToken(),
       };
 
       _logRequest('PATCH', url, body, headers);
@@ -168,16 +161,11 @@ class NetworkCaller {
           statusCode: response.statusCode,
           body: {},
           errorMessage:
-          decodedJson['data']?.toString() ?? _unAuthorizedErrorMessage,
+              decodedJson['data']?.toString() ?? _unAuthorizedErrorMessage,
         );
       } else {
-        final decodedJson = jsonDecode(response.body);
-        return NetworkResponse(
-          success: false,
-          statusCode: response.statusCode,
-          body: {},
-          errorMessage: decodedJson['data']?.toString() ?? _defaultErrorMessage,
-        );
+        // CHANGE 3: Smart Error Parsing
+        return _handleErrorResponse(response);
       }
     } catch (e) {
       return NetworkResponse(
@@ -197,9 +185,10 @@ class NetworkCaller {
     try {
       Uri uri = Uri.parse(url);
 
+      // CHANGE 2: Call accessToken()
       final Map<String, String> headers = {
         'Content-Type': 'application/json',
-        'token': accessToken,
+        'token': accessToken(),
       };
 
       _logRequest('PUT', url, body, headers);
@@ -230,16 +219,11 @@ class NetworkCaller {
           statusCode: response.statusCode,
           body: {},
           errorMessage:
-          decodedJson['data']?.toString() ?? _unAuthorizedErrorMessage,
+              decodedJson['data']?.toString() ?? _unAuthorizedErrorMessage,
         );
       } else {
-        final decodedJson = jsonDecode(response.body);
-        return NetworkResponse(
-          success: false,
-          statusCode: response.statusCode,
-          body: {},
-          errorMessage: decodedJson['data']?.toString() ?? _defaultErrorMessage,
-        );
+        // CHANGE 3: Smart Error Parsing
+        return _handleErrorResponse(response);
       }
     } catch (e) {
       return NetworkResponse(
@@ -259,9 +243,10 @@ class NetworkCaller {
     try {
       Uri uri = Uri.parse(url);
 
+      // CHANGE 2: Call accessToken()
       final Map<String, String> headers = {
         'Content-Type': 'application/json',
-        'token': accessToken,
+        'token': accessToken(),
       };
 
       _logRequest('DELETE', url, body, headers);
@@ -278,8 +263,16 @@ class NetworkCaller {
         final decodedJson = jsonDecode(response.body);
         return NetworkResponse(
           success: true,
-          statusCode: response.statusCode,
+          statusCode: 200,
           body: decodedJson,
+          errorMessage: '',
+        );
+      } else if (response.statusCode == 204) {
+        // Handle 204 separately because it has NO BODY to decode
+        return NetworkResponse(
+          success: true,
+          statusCode: 204,
+          body: {},
           errorMessage: '',
         );
       } else if (response.statusCode == 401) {
@@ -292,16 +285,11 @@ class NetworkCaller {
           statusCode: response.statusCode,
           body: {},
           errorMessage:
-          decodedJson['data']?.toString() ?? _unAuthorizedErrorMessage,
+              decodedJson['data']?.toString() ?? _unAuthorizedErrorMessage,
         );
       } else {
-        final decodedJson = jsonDecode(response.body);
-        return NetworkResponse(
-          success: false,
-          statusCode: response.statusCode,
-          body: {},
-          errorMessage: decodedJson['data']?.toString() ?? _defaultErrorMessage,
-        );
+        // CHANGE 3: Smart Error Parsing
+        return _handleErrorResponse(response);
       }
     } catch (e) {
       return NetworkResponse(
@@ -313,30 +301,54 @@ class NetworkCaller {
     }
   }
 
-  // FIX: Updated signature to accept dynamic body values
+  // Helper method to extract meaningful error messages
+  NetworkResponse _handleErrorResponse(Response response) {
+    final decodedJson = jsonDecode(response.body);
+    String errorMsg = _defaultErrorMessage;
+
+    if (decodedJson is Map<String, dynamic>) {
+      if (decodedJson.containsKey('data')) {
+        errorMsg = decodedJson['data'].toString();
+      } else if (decodedJson.containsKey('msg')) {
+        errorMsg = decodedJson['msg'].toString();
+      } else if (decodedJson.containsKey('message')) {
+        errorMsg = decodedJson['message'].toString();
+      } else if (decodedJson.containsKey('error')) {
+        errorMsg = decodedJson['error'].toString();
+      }
+    }
+
+    return NetworkResponse(
+      success: false,
+      statusCode: response.statusCode,
+      body: {},
+      errorMessage: errorMsg,
+    );
+  }
+
   void _logRequest(
-      String method,
-      String url,
-      Map<String, dynamic>? body,
-      Map<String, String>? headers,
-      ) {
+    String method,
+    String url,
+    Map<String, dynamic>? body,
+    Map<String, String>? headers,
+  ) {
     _logger.i(
       '========== Request =========='
-          '\nMethod: $method'
-          '\nURL: $url'
-          '\nHeaders: ${headers?.toString() ?? 'No headers'}'
-          '\nBody: ${body?.toString() ?? 'No body'}'
-          '\n=============================',
+      '\nMethod: $method'
+      '\nURL: $url'
+      '\nHeaders: ${headers?.toString() ?? 'No headers'}'
+      '\nBody: ${body?.toString() ?? 'No body'}'
+      '\n=============================',
     );
   }
 
   void _logResponse(String url, Response response) {
     _logger.i(
       '========== Response =========='
-          '\nURL: $url'
-          '\nStatus Code: ${response.statusCode}'
-          '\nBody: ${response.body}'
-          '\n==============================',
+      '\nURL: $url'
+      '\nStatus Code: ${response.statusCode}'
+      '\nBody: ${response.body}'
+      '\n==============================',
     );
   }
 }

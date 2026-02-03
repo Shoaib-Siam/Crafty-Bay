@@ -19,7 +19,7 @@ class Validators {
   RegExp(r"^[\p{L}0-9\s,.\-/#]{5,100}$", unicode: true);
 
   // OTP: exactly 6 digits
-  static final RegExp otpRegex = RegExp(r'^\d{6}$');
+  static final RegExp otpRegex = RegExp(r'^\d{4}$');
 
   // REVIEW REGEX (New)
   // [\s\S] matches ANY character including newlines (Enter key).

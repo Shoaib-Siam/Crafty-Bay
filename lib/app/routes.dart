@@ -31,8 +31,13 @@ MaterialPageRoute onGenerateRoute(RouteSettings settings) {
     screen = const ResetPasswordScreen();
   } else if (settings.name == SignUpScreen.routeName) {
     screen = SignUpScreen();
-  } else if (settings.name == OtpVerifyScreen.routeName) {
-    screen = OtpVerifyScreen();
+  }
+  else if (settings.name == OtpVerifyScreen.routeName) {
+    final args = settings.arguments as Map<String, dynamic>;
+    screen = OtpVerifyScreen(
+      email: args['email'],
+      isPasswordReset: args['isPasswordReset'] ?? false,
+    );
   } else if (settings.name == MainBottomNavScreen.routeName) {
     screen = MainBottomNavScreen();
   } else if (settings.name == ProductDetailsScreen.routeName) {

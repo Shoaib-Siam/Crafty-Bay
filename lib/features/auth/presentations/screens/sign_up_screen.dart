@@ -1,8 +1,12 @@
 import 'package:crafty_bay/app/extensions/localization_extension.dart';
-import 'package:crafty_bay/features/auth/presentations/screens/sign_in_screen.dart';
+import 'package:crafty_bay/features/auth/presentations/screens/otp_verify_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
+import '../../../shared/presentation/widgets/snack_bar_message.dart';
+import '../../data/models/sign_up_request_model.dart';
+import '../controllers/sign_up_controller.dart';
 import '../widgets/app_logo.dart';
 import '../widgets/password_visibility_icon.dart';
 import '../widgets/validators.dart';
@@ -24,10 +28,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
 
+  final SignUpController _signUpController = Get.put(SignUpController());
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool _passwordVisible = false;
   String? _completePhoneNumber;
+  AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +46,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             padding: const EdgeInsets.all(16.0),
             child: Form(
               key: _formKey,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
+              autovalidateMode: _autoValidateMode,
               child: Column(
                 children: [
                   const SizedBox(height: 30),
@@ -153,9 +159,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   SizedBox(height: 20),
 
                   // Sign Up Button
-                  FilledButton(
-                    onPressed: _onTapSignUpButton,
-                    child: Text(context.localization.signUp),
+                  GetBuilder<SignUpController>(
+                    builder: (controller) {
+                      return Visibility(
+                        visible: !controller.inProgress,
+                        replacement: CircularProgressIndicator(),
+
+                        child: FilledButton(
+                          onPressed: _onTapSignUpButton,
+                          child: Text(context.localization.signUp),
+                        ),
+                      );
+                    },
                   ),
                   SizedBox(height: 10),
 
@@ -181,16 +196,60 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   void _onTapSignUpButton() {
     if (_formKey.currentState!.validate()) {
-      // FIX: Close keyboard before navigating
-      FocusScope.of(context).unfocus();
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        SignInScreen.routeName,
-            (route) => false,
-      );
+      _signUp();
+    } else {
+      setState(() {
+        _autoValidateMode = AutovalidateMode.onUserInteraction;
+      });
     }
   }
 
+  Future<void> _signUp() async {
+    // 1. Basic Validation for Phone
+    if (_completePhoneNumber == null) {
+      if (Get.isSnackbarOpen) {
+        Get.closeAllSnackbars();
+      }
+      showSnackBarMessage(
+        'Error',
+        'Please enter a valid mobile number',
+        isError: true,
+      );
+      return;
+    }
+
+    // 2. Create the model
+    SignUpRequestModel model = SignUpRequestModel(
+      email: _emailController.text.trim(),
+      firstName: _firstNameController.text.trim(),
+      lastName: _lastNameController.text.trim(),
+      phone: _completePhoneNumber!,
+      password: _passwordController.text,
+      city: _addressController.text.trim(),
+    );
+
+    // 3. Call the controller
+    final bool isSuccess = await _signUpController.signUp(model);
+
+    // 4. Handle success
+    if (isSuccess) {
+      if (mounted) FocusScope.of(context).unfocus();
+
+      showSnackBarMessage(
+        'Success',
+        'Registration Successful! Please verify your account.',
+      );
+
+      // FIX: Pass the Email and the Flag in a Map
+      Get.toNamed(
+        OtpVerifyScreen.routeName,
+        arguments: {
+          'email': _emailController.text.trim(),
+          'isPasswordReset': false,
+        },
+      );
+    }
+  }
   void _onTapBackToSignInButton() {
     // FIX: Close keyboard before navigating
     FocusScope.of(context).unfocus();

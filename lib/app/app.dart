@@ -51,7 +51,7 @@ class _CraftyBayState extends State<CraftyBay> {
           title: 'Crafty Bay',
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
-          themeMode: ThemeMode.light,
+          themeMode: ThemeMode.dark,
           initialRoute: SplashScreen.routeName,
           onGenerateRoute: onGenerateRoute,
           initialBinding: ControllerBinder(),
