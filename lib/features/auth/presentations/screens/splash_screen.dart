@@ -2,7 +2,10 @@ import 'package:crafty_bay/app/extensions/localization_extension.dart';
 import 'package:crafty_bay/app/utils/app_version_service.dart';
 import 'package:crafty_bay/features/auth/presentations/screens/sign_in_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import '../../../../app/controller/auth_controller.dart';
+import '../../../shared/presentation/screens/bottom_nav_screen.dart';
 import '../widgets/app_logo.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -22,9 +25,16 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _navigate() async {
-    await Future.delayed(const Duration(seconds: 3));
-    if (mounted) {
-      Navigator.pushReplacementNamed(context, SignInScreen.routeName);
+    await Future.delayed(const Duration(seconds: 2));
+
+    // 1. Check if token exists
+    await AuthController.getUserToken();
+
+    // 2. Navigate based on status
+    if (AuthController.isLoggedIn) {
+      Get.offAllNamed(MainBottomNavScreen.routeName);
+    } else {
+      Get.offAllNamed(SignInScreen.routeName);
     }
   }
 

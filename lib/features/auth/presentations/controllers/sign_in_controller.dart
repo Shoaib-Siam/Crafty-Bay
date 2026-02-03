@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import '../../../../app/controller/auth_controller.dart';
 import '../../../../app/urls.dart';
 import '../../../../core/models/network_response.dart';
 import '../../../../core/services/network_caller.dart';
@@ -27,8 +28,15 @@ class SignInController extends GetxController {
     _signInInProgress = false;
     update();
 
-    if (response.success) {
-      // Login Success Logic...
+    if (response.success && response.body != null) {
+      // FIX: Extract token from response and save it
+      // Assuming your API returns: { "msg": "success", "data": { "token": "..." } }
+      // Adjust keys based on your actual API response structure!
+      final String token =
+          response.body['token'] ?? response.body['data']['token'];
+
+      await AuthController.saveUserToken(token);
+
       return true;
     } else {
       showSnackBarMessage(

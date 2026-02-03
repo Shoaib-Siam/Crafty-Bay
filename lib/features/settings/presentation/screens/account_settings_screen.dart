@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../auth/presentations/screens/sign_in_screen.dart';
+import '../../../../app/controller/auth_controller.dart';
 import 'change_password_screen.dart';
 import 'edit_profile_screen.dart';
 
@@ -20,8 +20,9 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
   Widget build(BuildContext context) {
     // Determine colors based on current theme
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final Color sectionTitleColor =
-    isDark ? Colors.grey.shade400 : Colors.grey.shade600;
+    final Color sectionTitleColor = isDark
+        ? Colors.grey.shade400
+        : Colors.grey.shade600;
 
     return Scaffold(
       appBar: AppBar(
@@ -146,12 +147,8 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
           SizedBox(
             width: double.infinity,
             child: OutlinedButton(
-              onPressed: () {
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  SignInScreen.routeName,
-                      (route) => false,
-                );
+              onPressed: () async {
+                await AuthController.clearAuthData();
               },
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: Colors.red),
@@ -193,10 +190,9 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
             children: [
               Text(
                 "Tanvir Ahmed",
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(fontWeight: FontWeight.bold),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 4),
               Text(
@@ -229,18 +225,26 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
           ),
         ],
       ),
-      child: Material( // <--- WRAP IN MATERIAL
+      child: Material(
+        // <--- WRAP IN MATERIAL
         color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(8),
         clipBehavior: Clip.antiAlias, // <--- CLIPS RIPPLE
         child: ListTile(
           onTap: onTap,
           leading: Icon(icon, color: Theme.of(context).colorScheme.primary),
-          title: Text(title, style: const TextStyle(fontWeight: FontWeight.w500)),
+          title: Text(
+            title,
+            style: const TextStyle(fontWeight: FontWeight.w500),
+          ),
           subtitle: subtitle != null
               ? Text(subtitle, style: const TextStyle(fontSize: 12))
               : null,
-          trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+          trailing: const Icon(
+            Icons.arrow_forward_ios,
+            size: 16,
+            color: Colors.grey,
+          ),
         ),
       ),
     );

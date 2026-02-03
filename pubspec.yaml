@@ -29,6 +29,7 @@ dependencies:
   carousel_slider_plus: ^7.1.1
   http: ^1.6.0
   logger: ^2.6.2
+  shared_preferences: ^2.5.4
 
 dev_dependencies:
   flutter_test:
