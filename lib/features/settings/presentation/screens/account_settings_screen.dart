@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../app/controller/auth_controller.dart';
+import '../../../shared/presentation/widgets/snack_bar_message.dart';
 import 'change_password_screen.dart';
 import 'edit_profile_screen.dart';
 
@@ -138,9 +140,21 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
               _buildSettingsTile(
                 icon: Icons.phone_outlined,
                 title: "Call Support",
-                subtitle: "Call us at +8801700000000",
-                onTap: () {
-                  print("Calling support...");
+                subtitle: "Call us at +8801765432100",
+                onTap: () async {
+                  // 1. Use Uri.parse for cleaner syntax
+                  final Uri url = Uri.parse('tel:+8801765432100');
+
+                  // 2. Check if the device can handle the call
+                  if (await canLaunchUrl(url)) {
+                    await launchUrl(url);
+                  } else {
+                    showSnackBarMessage(
+                      'Error',
+                      'Could not launch dialer.',
+                      isError: true,
+                    );
+                  }
                 },
               ),
 
@@ -197,7 +211,9 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
               Text(
                 // Show Real Name or 'Guest' if null
                 "${userData?.firstName ?? 'Guest'} ${userData?.lastName ?? ''}",
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 4),
               Text(
