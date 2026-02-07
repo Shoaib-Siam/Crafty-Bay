@@ -25,12 +25,15 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _navigate() async {
+    // 1. Wait for 2 seconds (visual delay)
     await Future.delayed(const Duration(seconds: 2));
 
-    // 1. Check if token exists
-    await AuthController.getUserToken();
+    // 2. Load User Data (Token + Profile)
+    // Make sure your AuthController has a method named 'getUserData' or 'getUserToken'
+    // that loads shared preferences.
+    await AuthController.getUserData();
 
-    // 2. Navigate based on status
+    // 3. Navigate based on status
     if (AuthController.isLoggedIn) {
       Get.offAllNamed(MainBottomNavScreen.routeName);
     } else {
@@ -47,14 +50,15 @@ class _SplashScreenState extends State<SplashScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Spacer(),
-              AppLogo(),
-              Spacer(),
-              CircularProgressIndicator(),
+              const Spacer(),
+              const AppLogo(),
+              const Spacer(),
+              const CircularProgressIndicator(),
               const SizedBox(height: 10),
               Text(
                 '${context.localization.version} '
-                '${AppVersionService.currentAppVersion}',
+                    '${AppVersionService.currentAppVersion}',
+                style: const TextStyle(color: Colors.grey),
               ),
             ],
           ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../../app/controller/auth_controller.dart';
 import 'change_password_screen.dart';
 import 'edit_profile_screen.dart';
@@ -24,155 +25,160 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
         ? Colors.grey.shade400
         : Colors.grey.shade600;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Account & Settings'),
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back_ios),
-        ),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          // 1. User Profile Header
-          _buildUserProfileHeader(context),
-
-          const SizedBox(height: 30),
-
-          // 2. Account Section
-          Text(
-            "Account",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: sectionTitleColor,
+    return GetBuilder<AuthController>(
+      builder: (authController) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Account & Settings'),
+            leading: IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(Icons.arrow_back_ios),
             ),
           ),
-          const SizedBox(height: 8),
+          body: ListView(
+            padding: const EdgeInsets.all(16),
+            children: [
+              // 1. User Profile Header
+              _buildUserProfileHeader(context),
 
-          _buildSettingsTile(
-            icon: Icons.person_outline,
-            title: "Personal Information",
-            onTap: () {
-              Navigator.pushNamed(context, EditProfileScreen.routeName);
-            },
-          ),
-          _buildSettingsTile(
-            icon: Icons.shopping_bag_outlined,
-            title: "My Orders",
-            onTap: () {},
-          ),
+              const SizedBox(height: 30),
 
-          const SizedBox(height: 24),
-
-          // 3. Settings Section
-          Text(
-            "Settings",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: sectionTitleColor,
-            ),
-          ),
-          const SizedBox(height: 8),
-
-          // Dark Mode Switch
-          Container(
-            margin: const EdgeInsets.only(bottom: 8),
-            decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
-              borderRadius: BorderRadius.circular(8),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
+              // 2. Account Section
+              Text(
+                "Account",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: sectionTitleColor,
                 ),
-              ],
-            ),
-            // FIX: ClipRRect ensures the ripple effect doesn't bleed out
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: SwitchListTile(
-                secondary: Icon(
-                  _isDarkMode ? Icons.dark_mode : Icons.light_mode,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                title: const Text(
-                  "Dark Mode",
-                  style: TextStyle(fontWeight: FontWeight.w500),
-                ),
-                value: _isDarkMode,
-                onChanged: (value) {
-                  setState(() {
-                    _isDarkMode = value;
-                  });
-                  // TODO: Call your ThemeController here
+              ),
+              const SizedBox(height: 8),
+
+              _buildSettingsTile(
+                icon: Icons.person_outline,
+                title: "Personal Information",
+                onTap: () {
+                  Navigator.pushNamed(context, EditProfileScreen.routeName);
                 },
               ),
-            ),
-          ),
-
-          _buildSettingsTile(
-            icon: Icons.lock_outline,
-            title: "Change Password",
-            onTap: () {
-              Navigator.pushNamed(context, ChangePasswordScreen.routeName);
-            },
-          ),
-
-          const SizedBox(height: 24),
-
-          // 4. Support Section
-          Text(
-            "Support",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: sectionTitleColor,
-            ),
-          ),
-          const SizedBox(height: 8),
-
-          _buildSettingsTile(
-            icon: Icons.phone_outlined,
-            title: "Call Support",
-            subtitle: "Call us at +8801700000000",
-            onTap: () {
-              print("Calling support...");
-            },
-          ),
-
-          const SizedBox(height: 24),
-
-          // 5. Logout Button
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton(
-              onPressed: () async {
-                await AuthController.clearAuthData();
-              },
-              style: OutlinedButton.styleFrom(
-                side: const BorderSide(color: Colors.red),
-                foregroundColor: Colors.red,
-                padding: const EdgeInsets.symmetric(vertical: 12),
+              _buildSettingsTile(
+                icon: Icons.shopping_bag_outlined,
+                title: "My Orders",
+                onTap: () {},
               ),
-              child: const Text("Logout"),
-            ),
-          ),
 
-          const SizedBox(height: 30),
-          Center(
-            child: Text(
-              "Version 1.0.0",
-              style: TextStyle(color: Colors.grey.shade400, fontSize: 12),
-            ),
+              const SizedBox(height: 24),
+
+              // 3. Settings Section
+              Text(
+                "Settings",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: sectionTitleColor,
+                ),
+              ),
+              const SizedBox(height: 8),
+
+              // Dark Mode Switch
+              Container(
+                margin: const EdgeInsets.only(bottom: 8),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).cardColor,
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                // FIX: ClipRRect ensures the ripple effect doesn't bleed out
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: SwitchListTile(
+                    secondary: Icon(
+                      _isDarkMode ? Icons.dark_mode : Icons.light_mode,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    title: const Text(
+                      "Dark Mode",
+                      style: TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                    value: _isDarkMode,
+                    onChanged: (value) {
+                      setState(() {
+                        _isDarkMode = value;
+                      });
+                      // TODO: Call your ThemeController here
+                    },
+                  ),
+                ),
+              ),
+
+              _buildSettingsTile(
+                icon: Icons.lock_outline,
+                title: "Change Password",
+                onTap: () {
+                  Navigator.pushNamed(context, ChangePasswordScreen.routeName);
+                },
+              ),
+
+              const SizedBox(height: 24),
+
+              // 4. Support Section
+              Text(
+                "Support",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: sectionTitleColor,
+                ),
+              ),
+              const SizedBox(height: 8),
+
+              _buildSettingsTile(
+                icon: Icons.phone_outlined,
+                title: "Call Support",
+                subtitle: "Call us at +8801700000000",
+                onTap: () {
+                  print("Calling support...");
+                },
+              ),
+
+              const SizedBox(height: 24),
+
+              // 5. Logout Button
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton(
+                  onPressed: () async {
+                    await AuthController.clearAuthData();
+                  },
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(color: Colors.red),
+                    foregroundColor: Colors.red,
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
+                  child: const Text("Logout"),
+                ),
+              ),
+
+              const SizedBox(height: 30),
+              Center(
+                child: Text(
+                  "Version 1.0.0",
+                  style: TextStyle(color: Colors.grey.shade400, fontSize: 12),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 
   // Helper Widget for the User Header
   Widget _buildUserProfileHeader(BuildContext context) {
+    final userData = AuthController.userData;
     return Row(
       children: [
         CircleAvatar(
@@ -189,14 +195,14 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Tanvir Ahmed",
-                style: Theme.of(
-                  context,
-                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                // Show Real Name or 'Guest' if null
+                "${userData?.firstName ?? 'Guest'} ${userData?.lastName ?? ''}",
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 4),
               Text(
-                "tanvir@gmail.com",
+                // Show Real Email
+                userData?.email ?? 'No email',
                 style: TextStyle(color: Colors.grey.shade500, fontSize: 13),
               ),
             ],
