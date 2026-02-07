@@ -7,11 +7,13 @@ import '../features/auth/presentations/controllers/sign_up_controller.dart';
 import '../features/shared/presentation/controller/main_nav_controller.dart';
 import 'controller/auth_controller.dart';
 import 'controller/language_controller.dart';
+import 'controller/theme_controller.dart';
 
 class ControllerBinder extends Bindings {
   @override
   void dependencies() {
     Get.put(AuthController());
+    Get.put(ThemeController());
     Get.put(MainNavController());
     Get.put(setUpNetworkClient());
     //Get.put(LanguageController());

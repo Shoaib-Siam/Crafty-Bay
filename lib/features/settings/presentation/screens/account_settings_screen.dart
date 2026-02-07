@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../app/controller/auth_controller.dart';
+import '../../../../app/controller/theme_controller.dart';
 import '../../../shared/presentation/widgets/snack_bar_message.dart';
 import 'change_password_screen.dart';
 import 'edit_profile_screen.dart';
@@ -16,8 +17,7 @@ class AccountSettingsScreen extends StatefulWidget {
 }
 
 class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
-  // Dummy state for the Theme Switch
-  bool _isDarkMode = false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -80,41 +80,38 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
               ),
               const SizedBox(height: 8),
 
-              // Dark Mode Switch
-              Container(
-                margin: const EdgeInsets.only(bottom: 8),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).cardColor,
-                  borderRadius: BorderRadius.circular(8),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
+              // DARK MODE SWITCH
+              // Wrap with GetBuilder to listen for changes
+              GetBuilder<ThemeController>(
+                builder: (themeController) {
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                  ],
-                ),
-                // FIX: ClipRRect ensures the ripple effect doesn't bleed out
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: SwitchListTile(
-                    secondary: Icon(
-                      _isDarkMode ? Icons.dark_mode : Icons.light_mode,
-                      color: Theme.of(context).colorScheme.primary,
+                    child: SwitchListTile(
+                      secondary: Icon(
+                        themeController.isDarkMode
+                            ? Icons.dark_mode
+                            : Icons.light_mode,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      title: const Text(
+                        "Dark Mode",
+                        style: TextStyle(fontWeight: FontWeight.w500),
+                      ),
+
+                      // Use the controller's value
+                      value: themeController.isDarkMode,
+
+                      onChanged: (bool value) {
+                        // Call the controller to switch theme
+                        themeController.toggleTheme(value);
+                      },
                     ),
-                    title: const Text(
-                      "Dark Mode",
-                      style: TextStyle(fontWeight: FontWeight.w500),
-                    ),
-                    value: _isDarkMode,
-                    onChanged: (value) {
-                      setState(() {
-                        _isDarkMode = value;
-                      });
-                      // TODO: Call your ThemeController here
-                    },
-                  ),
-                ),
+                  );
+                },
               ),
 
               _buildSettingsTile(

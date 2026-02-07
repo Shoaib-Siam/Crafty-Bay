@@ -8,13 +8,14 @@ import '../features/auth/presentations/screens/splash_screen.dart';
 import '../l10n/app_localizations.dart';
 import 'app_theme.dart';
 import 'controller/language_controller.dart';
+import 'controller/theme_controller.dart';
 import 'controller_binder.dart';
 
 class CraftyBay extends StatefulWidget {
   const CraftyBay({super.key});
 
   static final GlobalKey<NavigatorState> navigatorKey =
-      GlobalKey<NavigatorState>();
+  GlobalKey<NavigatorState>();
   static final LanguageController languageController = LanguageController();
 
   @override
@@ -29,32 +30,39 @@ class _CraftyBayState extends State<CraftyBay> {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder(
+    // Language Builder
+    return GetBuilder<LanguageController>(
       init: CraftyBay.languageController,
-
       builder: (languageController) {
-        return GetMaterialApp(
-          navigatorKey: CraftyBay.navigatorKey,
-          debugShowCheckedModeBanner: false,
-          localizationsDelegates: [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
 
-          supportedLocales: languageController.supportedLocales,
-          locale: languageController.currentLocale,
+        return GetBuilder<ThemeController>(
+          init: ThemeController(),
+          builder: (themeController) {
+            return GetMaterialApp(
+              navigatorKey: CraftyBay.navigatorKey,
+              debugShowCheckedModeBanner: false,
 
-          navigatorObservers: [observer],
+              // Localization
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: languageController.supportedLocales,
+              locale: languageController.currentLocale,
 
-          title: 'Crafty Bay',
-          theme: AppTheme.lightTheme,
-          darkTheme: AppTheme.darkTheme,
-          themeMode: ThemeMode.dark,
-          initialRoute: SplashScreen.routeName,
-          onGenerateRoute: onGenerateRoute,
-          initialBinding: ControllerBinder(),
+              navigatorObservers: [observer],
+              title: 'Crafty Bay',
+
+              theme: AppTheme.lightTheme,
+              darkTheme: AppTheme.darkTheme,
+              themeMode: themeController.themeMode,
+              initialRoute: SplashScreen.routeName,
+              onGenerateRoute: onGenerateRoute,
+              initialBinding: ControllerBinder(),
+            );
+          },
         );
       },
     );
