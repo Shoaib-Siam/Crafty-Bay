@@ -10,6 +10,12 @@ class Urls {
   static const String readProfileUrl = '$_baseUrl/auth/profile';
   static const String updateProfileUrl = '$_baseUrl/auth/profile';
 
+  // Home Screen APIs
+  static const String slideListUrl = '$_baseUrl/slides';
+  static const String categoryListUrl = '$_baseUrl/category-list';
+  static const String productListUrl = '$_baseUrl/product-list';
+  static const String brandListUrl = '$_baseUrl/brand-list';
+
 
 
 }

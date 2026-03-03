@@ -4,14 +4,19 @@ import '../../../../features/home/presentation/screens/home_screen.dart';
 import '../../../../features/category/presentation/screens/category_list_screen.dart';
 import '../../../cart/presentation/screens/cart_screen.dart';
 import '../../../wishlist/presentation/screens/wishlist_screen.dart';
-import '../controller/main_nav_controller.dart'; // Import your controller
-
-class MainBottomNavScreen extends StatelessWidget {
+import '../controller/main_nav_controller.dart';
+import '../../../home/controller/slider_controller.dart';
+class MainBottomNavScreen extends StatefulWidget {
   const MainBottomNavScreen({super.key});
 
   static const String routeName = '/main-bottom-nav';
 
-  // We define the screens list as static or inside the build method
+  @override
+  State<MainBottomNavScreen> createState() => _MainBottomNavScreenState();
+}
+
+class _MainBottomNavScreenState extends State<MainBottomNavScreen> {
+  // The screens list moves inside the State class
   final List<Widget> _screens = const [
     HomeScreen(),
     CategoryListScreen(),
@@ -20,8 +25,14 @@ class MainBottomNavScreen extends StatelessWidget {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    // Fetch banner data as soon as the main navigation loads
+    Get.find<SliderController>().getSliders();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // GetBuilder listens to the MainNavController we injected in ControllerBinder
     return GetBuilder<MainNavController>(
       builder: (controller) {
         return Scaffold(
@@ -29,7 +40,6 @@ class MainBottomNavScreen extends StatelessWidget {
           bottomNavigationBar: NavigationBar(
             selectedIndex: controller.selectedIndex,
             onDestinationSelected: (int index) {
-              // Call the method from the controller
               controller.changeIndex(index);
             },
             destinations: const [
