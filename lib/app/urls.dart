@@ -12,8 +12,7 @@ class Urls {
 
   // Home Screen APIs
   static const String slideListUrl = '$_baseUrl/slides';
-  static const String categoryListUrl = '$_baseUrl/category-list';
-  static const String productListUrl = '$_baseUrl/product-list';
+  static String categoryListUrl(int page, int count) => '$_baseUrl/categories?page=$page&count=$count';  static const String productListUrl = '$_baseUrl/product-list';
   static const String brandListUrl = '$_baseUrl/brand-list';
 
 

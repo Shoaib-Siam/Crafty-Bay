@@ -3,9 +3,11 @@ import 'package:get/get.dart';
 import '../../../../features/home/presentation/screens/home_screen.dart';
 import '../../../../features/category/presentation/screens/category_list_screen.dart';
 import '../../../cart/presentation/screens/cart_screen.dart';
+import '../controller/category_controller.dart';
 import '../../../wishlist/presentation/screens/wishlist_screen.dart';
 import '../controller/main_nav_controller.dart';
 import '../../../home/controller/slider_controller.dart';
+
 class MainBottomNavScreen extends StatefulWidget {
   const MainBottomNavScreen({super.key});
 
@@ -27,8 +29,9 @@ class _MainBottomNavScreenState extends State<MainBottomNavScreen> {
   @override
   void initState() {
     super.initState();
-    // Fetch banner data as soon as the main navigation loads
+    // Fetch data as soon as the main navigation loads
     Get.find<SliderController>().getSliders();
+    Get.find<CategoryController>().getCategoryList();
   }
 
   @override
