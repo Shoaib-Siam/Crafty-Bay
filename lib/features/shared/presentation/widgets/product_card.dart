@@ -5,7 +5,7 @@ import '../../../../app/constants.dart';
 import '../../../products/presentation/screens/product_details_screen.dart';
 
 class ProductCardWidget extends StatelessWidget {
-  const ProductCardWidget({super.key});
+  const ProductCardWidget({super.key, required product});
 
   @override
   Widget build(BuildContext context) {

@@ -42,7 +42,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
           crossAxisSpacing: 8,
         ),
         itemBuilder: (context, index) {
-          return const ProductCardWidget();
+          return const ProductCardWidget(product: null,);
         },
       ),
     );

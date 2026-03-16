@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../shared/presentation/controller/main_nav_controller.dart';
 import '../widgets/home_banner_slider.dart';
-import '../widgets/home_app_bar.dart'; // Import New AppBar
-import '../widgets/category_list_view.dart'; // Import New List
-import '../widgets/product_list_view.dart'; // Import New List
+import '../widgets/home_app_bar.dart';
+import '../widgets/category_list_view.dart';
+import '../widgets/product_list_view.dart';
 import '../widgets/search_text_field.dart';
 import '../widgets/section_header.dart';
 
@@ -19,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const HomeAppBar(), // <--- CLEAN!
+      appBar: const HomeAppBar(),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -33,31 +33,29 @@ class _HomeScreenState extends State<HomeScreen> {
               SectionHeader(
                 title: 'All Categories',
                 onTap: () {
-                  // NEW CODE: This switches the Bottom Nav to Tab 1 (Categories)
                   Get.find<MainNavController>().backToCategory();
                 },
               ),
               const SizedBox(height: 8),
-
-              const CategoryListView(), // <--- CLEAN!
-
+              const CategoryListView(),
               const SizedBox(height: 16),
+
               SectionHeader(title: 'Popular', onTap: _onTapPopular),
               const SizedBox(height: 8),
-
-              const ProductListView(), // <--- CLEAN!
+              // Pass the 'popular' enum!
+              const ProductListView(listType: ProductListType.popular),
 
               const SizedBox(height: 16),
               SectionHeader(title: 'Special', onTap: _onTapSpecial),
               const SizedBox(height: 8),
-
-              const ProductListView(), // <--- REUSED!
+              // Pass the 'special' enum!
+              const ProductListView(listType: ProductListType.special),
 
               const SizedBox(height: 16),
-               SectionHeader(title: 'New', onTap: _onTapNew),
+              SectionHeader(title: 'New', onTap: _onTapNew),
               const SizedBox(height: 8),
-
-              const ProductListView(), // <--- REUSED!
+              // Pass the 'newArrivals' enum!
+              const ProductListView(listType: ProductListType.newArrivals),
 
               const SizedBox(height: 24),
             ],

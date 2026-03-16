@@ -6,6 +6,7 @@ import '../features/auth/presentations/controllers/sign_in_controller.dart';
 import '../features/auth/presentations/controllers/sign_up_controller.dart';
 import '../features/shared/presentation/controller/category_controller.dart';
 import '../features/shared/presentation/controller/main_nav_controller.dart';
+import '../features/shared/presentation/controller/product_controller.dart';
 import 'controller/auth_controller.dart';
 import 'controller/language_controller.dart';
 import '../features/home/controller/slider_controller.dart';
@@ -26,5 +27,6 @@ class ControllerBinder extends Bindings {
     // Get.put(ResetPasswordController());
     Get.put(SliderController());
     Get.put(CategoryController());
+    Get.put(ProductController());
   }
 }

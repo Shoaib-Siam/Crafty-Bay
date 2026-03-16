@@ -7,6 +7,7 @@ import '../controller/category_controller.dart';
 import '../../../wishlist/presentation/screens/wishlist_screen.dart';
 import '../controller/main_nav_controller.dart';
 import '../../../home/controller/slider_controller.dart';
+import '../controller/product_controller.dart';
 
 class MainBottomNavScreen extends StatefulWidget {
   const MainBottomNavScreen({super.key});
@@ -32,6 +33,9 @@ class _MainBottomNavScreenState extends State<MainBottomNavScreen> {
     // Fetch data as soon as the main navigation loads
     Get.find<SliderController>().getSliders();
     Get.find<CategoryController>().getCategoryList();
+    Get.find<ProductController>().getPopularProducts();
+    Get.find<ProductController>().getSpecialProducts();
+    Get.find<ProductController>().getNewProducts();
   }
 
   @override
