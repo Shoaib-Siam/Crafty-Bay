@@ -4,9 +4,11 @@ import 'package:get/get.dart';
 import '../features/auth/presentations/controllers/otp_verification_controller.dart';
 import '../features/auth/presentations/controllers/sign_in_controller.dart';
 import '../features/auth/presentations/controllers/sign_up_controller.dart';
+import '../features/products/presentation/controllers/product_details_controller.dart';
 import '../features/shared/presentation/controller/category_controller.dart';
 import '../features/shared/presentation/controller/main_nav_controller.dart';
 import '../features/shared/presentation/controller/product_controller.dart';
+import '../features/shared/presentation/controller/product_list_by_category_controller.dart';
 import 'controller/auth_controller.dart';
 import 'controller/language_controller.dart';
 import '../features/home/controller/slider_controller.dart';
@@ -28,5 +30,7 @@ class ControllerBinder extends Bindings {
     Get.put(SliderController());
     Get.put(CategoryController());
     Get.put(ProductController());
+    Get.put(ProductDetailsController());
+    Get.put(ProductListByCategoryController());
   }
 }

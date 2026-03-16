@@ -31,8 +31,7 @@ MaterialPageRoute onGenerateRoute(RouteSettings settings) {
     screen = const ResetPasswordScreen();
   } else if (settings.name == SignUpScreen.routeName) {
     screen = SignUpScreen();
-  }
-  else if (settings.name == OtpVerifyScreen.routeName) {
+  } else if (settings.name == OtpVerifyScreen.routeName) {
     final args = settings.arguments as Map<String, dynamic>;
     screen = OtpVerifyScreen(
       email: args['email'],
@@ -41,12 +40,23 @@ MaterialPageRoute onGenerateRoute(RouteSettings settings) {
   } else if (settings.name == MainBottomNavScreen.routeName) {
     screen = MainBottomNavScreen();
   } else if (settings.name == ProductDetailsScreen.routeName) {
-    screen = ProductDetailsScreen();
+    // 1. Grab the ID that was passed through the Navigator
+    final String productId = settings.arguments as String;
+
+    // 2. Pass it into the screen!
+    screen = ProductDetailsScreen(productId: productId);
   } else if (settings.name == CategoryListScreen.routeName) {
     screen = CategoryListScreen();
   } else if (settings.name == ProductListScreen.routeName) {
-    final String categoryName = settings.arguments as String;
-    screen = ProductListScreen(categoryName: categoryName);
+    // 1. Receive the arguments as a Map instead of a String
+    final Map<String, dynamic> args =
+        settings.arguments as Map<String, dynamic>;
+
+    screen = ProductListScreen(
+      // 2. Extract both values from the Map!
+      categoryName: args['categoryName'] as String,
+      categoryId: args['categoryId'] as String,
+    );
   } else if (settings.name == ReviewScreen.routeName) {
     screen = const ReviewScreen();
   } else if (settings.name == CreateReviewScreen.routeName) {

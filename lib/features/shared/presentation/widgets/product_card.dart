@@ -1,36 +1,36 @@
-import 'package:crafty_bay/features/shared/presentation/widgets/wishlist_button.dart';
 import 'package:flutter/material.dart';
-import '../../../../app/asset_paths.dart';
+import 'package:get/get.dart';
 import '../../../../app/constants.dart';
 import '../../../products/presentation/screens/product_details_screen.dart';
+import 'package:crafty_bay/features/shared/presentation/widgets/wishlist_button.dart';
+import '../../data/models/product_model.dart';
 
 class ProductCardWidget extends StatelessWidget {
-  const ProductCardWidget({super.key, required product});
+  // 1. ADD THIS LINE (Declare the type)
+  final ProductModel product;
+
+  // 2. FIX THE CONSTRUCTOR (Use 'this.product')
+  const ProductCardWidget({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: 140,
       child: Card(
-        // 1. Defined Shape (Radius 8)
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         elevation: 3,
         shadowColor: Theme.of(context).brightness == Brightness.dark
             ? Colors.transparent
             : Theme.of(context).primaryColor.withOpacity(0.2),
-        // 2. IMPORTANT: Clip the ripple to the card's shape
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: () {
-            Navigator.pushNamed(context, ProductDetailsScreen.routeName);
+            // This is much cleaner than Navigator.pushNamed!
+            Get.to(() => ProductDetailsScreen(productId: product.sId!));
           },
-          // FIX: Don't force a different radius here. Let the Card clip it.
-          // borderRadius: BorderRadius.circular(16), <--- REMOVED
-
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 3. FIX: Use 'Ink' instead of 'Container' so ripple shows ON TOP
               Ink(
                 height: 120,
                 width: double.infinity,
@@ -41,14 +41,17 @@ class ProductCardWidget extends StatelessWidget {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Image.asset(
-                    AssetPaths.dummyImageSvg, 
+                  child: Image.network(
+                    // 4. DYNAMIC IMAGE
+                    (product.photos != null && product.photos!.isNotEmpty)
+                        ? product.photos!.first
+                        : 'https://via.placeholder.com/150',
                     fit: BoxFit.contain,
+                    errorBuilder: (_, __, ___) => const Icon(Icons.image_not_supported),
                   ),
                 ),
               ),
 
-              // 2. Details Section
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -56,8 +59,9 @@ class ProductCardWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
+                      // 5. DYNAMIC TITLE
                       Text(
-                        'Nike Shoe 12K Air ',
+                        product.title ?? 'Unknown',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -78,8 +82,9 @@ class ProductCardWidget extends StatelessWidget {
                               crossAxisAlignment: WrapCrossAlignment.center,
                               spacing: 5,
                               children: [
+                                // 6. DYNAMIC PRICE
                                 Text(
-                                  '${takaSign}1200',
+                                  '$takaSign${product.currentPrice ?? 0}',
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     color: Theme.of(context).colorScheme.primary,
@@ -91,7 +96,7 @@ class ProductCardWidget extends StatelessWidget {
                                   children: [
                                     const Icon(Icons.star, color: Colors.amber, size: 14),
                                     Text(
-                                      '4.8',
+                                      '4.8', // Update if API adds ratings later
                                       style: TextStyle(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w600,
@@ -106,11 +111,11 @@ class ProductCardWidget extends StatelessWidget {
                             ),
                           ),
 
-                          // Wishlist Button
+                          // 7. DYNAMIC WISHLIST STATE
                           WishlistButtonWidget(
-                            isSelected: false,
+                            isSelected: product.inWishlist ?? false,
                             onTap: () {
-                              print('Heart clicked!');
+                              print('${product.title} wishlist clicked!');
                             },
                           ),
                         ],

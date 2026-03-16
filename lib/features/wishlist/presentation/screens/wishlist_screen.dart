@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../shared/data/models/product_model.dart';
 import '../../../shared/presentation/controller/main_nav_controller.dart';
 // TODO: Update this import to match your project structure
 import '../../../shared/presentation/widgets/product_card.dart';
@@ -44,7 +45,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
             crossAxisSpacing: 8,
           ),
           itemBuilder: (context, index) {
-            return const ProductCardWidget(product: null,);
+            return ProductCardWidget(product: ProductModel());
           },
         ),
       ),

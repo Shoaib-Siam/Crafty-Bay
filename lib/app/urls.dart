@@ -14,13 +14,15 @@ class Urls {
   static const String slideListUrl = '$_baseUrl/slides';
   static String categoryListUrl(int page, int count) => '$_baseUrl/categories?page=$page&count=$count';
 
-  static String productListUrl({String? tag}) {
-    String url = '$_baseUrl/products';
-    if (tag != null) {
-      url += '?tag=$tag';
+  static String productListUrl({String? tag, String? categoryId}) {
+    if (categoryId != null) {
+      return '$_baseUrl/products?category=$categoryId';
+    } else if (tag != null) {
+      return '$_baseUrl/products?tag=$tag';
     }
-    return url;
+    return '$_baseUrl/products';
   }
+  static String productDetailsById(String productId) => '$_baseUrl/products/id/$productId';
 
 
 

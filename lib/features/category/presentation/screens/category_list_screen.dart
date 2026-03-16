@@ -93,11 +93,10 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
 
                       return GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            ProductListScreen.routeName,
-                            arguments: category.title,
-                          );
+                          Get.to(() => ProductListScreen(
+                            categoryName: category.title ?? 'Unknown',
+                            categoryId: category.sId ?? '',
+                          ));
                         },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
