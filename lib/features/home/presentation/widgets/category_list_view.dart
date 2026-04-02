@@ -49,11 +49,10 @@ class CategoryListView extends StatelessWidget {
 
               return GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    ProductListScreen.routeName,
-                    arguments: category.title, // Keep passing the title for now
-                  );
+                  Get.to(() => ProductListScreen(
+                    categoryName: category.title ?? 'Unknown',
+                    categoryId: category.sId ?? '',
+                  ));
                 },
                 child: Column(
                   children: [
