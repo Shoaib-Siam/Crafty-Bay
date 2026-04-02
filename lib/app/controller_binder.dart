@@ -10,7 +10,6 @@ import '../features/shared/presentation/controller/main_nav_controller.dart';
 import '../features/shared/presentation/controller/product_controller.dart';
 import '../features/shared/presentation/controller/product_list_by_category_controller.dart';
 import 'controller/auth_controller.dart';
-import 'controller/language_controller.dart';
 import '../features/home/controller/slider_controller.dart';
 import 'controller/theme_controller.dart';
 

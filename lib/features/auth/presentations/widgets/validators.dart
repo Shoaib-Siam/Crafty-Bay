@@ -5,7 +5,7 @@ class Validators {
 
   // Password: min 8 chars, at least 1 letter, 1 number
   static final RegExp passwordRegex =
-  RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$');
+  RegExp(r'^(?=.*[A-Za-z])(?=.*\d).{8,}$');
 
   // Name: letters (any language), space, hyphen, apostrophe, min 2 chars
   static final RegExp nameRegex =
